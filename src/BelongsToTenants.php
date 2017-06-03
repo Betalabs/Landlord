@@ -155,7 +155,7 @@ trait BelongsToTenants
             return $this->morphToMany(
                 get_class($this->getTenantModel()),
                 $this->getTenantRelationsModel()->getTable()
-            );
+            )->withPivot('alias_id');
         }
 
         return null;
