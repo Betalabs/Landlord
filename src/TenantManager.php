@@ -195,8 +195,7 @@ class TenantManager
     public function newModelRelatedToManyTenants($model)
     {
         $this->modelTenants($model)->each(function($tenantId) use ($model) {
-            $tenant = ($model->getTenantModel())::find($tenantId);
-            $model->tenants()->save($tenant);
+            $model->tenants()->updateOrCreate(['tenants.id' => $tenantId]);
         });
     }
 
