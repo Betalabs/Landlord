@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 use HipsterJazzbo\Landlord\BelongsToTenants;
 use HipsterJazzbo\Landlord\Facades\Landlord;
 use HipsterJazzbo\Landlord\TenantManager;
@@ -107,11 +109,11 @@ class LandlordTest extends TestCase
 
         Landlord::shouldReceive('applyTenantScopes');
 
-        $tenant = Mockery::mock(TenantA::class);
+        $tenant = \Mockery::mock(TenantA::class);
         $tenant->shouldReceive('updateOrCreate')->with(['tenants.id' => 1]);
         $tenant->shouldReceive('updateOrCreate')->with(['tenants.id' => 2]);
 
-        $mock = Mockery::mock(ModelStubWithBelongsToManyTenants::class);
+        $mock = \Mockery::mock(ModelStubWithBelongsToManyTenants::class);
         $mock->shouldReceive('getTenantModel')->andReturn();
         $mock->shouldReceive('tenants')->andReturn($tenant);
         $mock->makePartial();
