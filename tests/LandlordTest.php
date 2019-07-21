@@ -70,13 +70,13 @@ class LandlordTest extends TestCase
 
         Landlord::shouldReceive('applyTenantScopes');
 
-        $model = new ModelStub();
+        $model = new ModelStubWithBelongsToOneTenant();
 
         $landlord->applyTenantScopes($model);
 
-        $this->assertArrayHasKey('tenant_a_id', $model->getGlobalScopes());
-
-        $this->assertArrayNotHasKey('tenant_b_id', $model->getGlobalScopes());
+        foreach ($model->getGlobalScopes() as $globalScope) {
+            $this->assertEquals($globalScope->getTenantColumn(), 'tenant_a_id');
+        }
     }
 
     public function testNewModel()
@@ -89,7 +89,7 @@ class LandlordTest extends TestCase
 
         Landlord::shouldReceive('applyTenantScopes');
 
-        $model = new ModelStub();
+        $model = new ModelStubWithBelongsToOneTenant();
 
         $landlord->newModel($model);
 
@@ -97,13 +97,46 @@ class LandlordTest extends TestCase
 
         $this->assertNull($model->tenant_b_id);
     }
+
+    public function testNewModelRelatedToManyTenants()
+    {
+        $landlord = new TenantManager();
+
+        $landlord->addTenant('tenant_a_id', 1);
+        $landlord->addTenant('tenant_b_id', 2);
+
+        Landlord::shouldReceive('applyTenantScopes');
+
+        $tenant = Mockery::mock(TenantA::class);
+        $tenant->shouldReceive('updateOrCreate')->with(['tenants.id' => 1]);
+        $tenant->shouldReceive('updateOrCreate')->with(['tenants.id' => 2]);
+
+        $mock = Mockery::mock(ModelStubWithBelongsToManyTenants::class);
+        $mock->shouldReceive('getTenantModel')->andReturn();
+        $mock->shouldReceive('tenants')->andReturn($tenant);
+        $mock->makePartial();
+
+        app()->instance(ModelStubWithBelongsToManyTenants::class, $mock);
+        $model = app()->make(ModelStubWithBelongsToManyTenants::class);
+
+        $landlord->newModelRelatedToManyTenants($model);
+    }
 }
 
-class ModelStub extends Model
+class ModelStubWithBelongsToManyTenants extends Model
 {
     use BelongsToTenants;
 
     public $tenantColumns = ['tenant_a_id'];
+    public $belongsToTenantType = TenantManager::BELONGS_TO_TENANT_TYPE_TO_MANY;
+}
+
+class ModelStubWithBelongsToOneTenant extends Model
+{
+    use BelongsToTenants;
+
+    public $tenantColumns = ['tenant_a_id'];
+    public $belongsToTenantType = TenantManager::BELONGS_TO_TENANT_TYPE_TO_ONE;
 }
 
 class TenantA extends Model

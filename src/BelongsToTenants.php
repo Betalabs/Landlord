@@ -103,7 +103,7 @@ trait BelongsToTenants
     private function getTenantMorphRelationConfiguration()
     {
         $morphRelation = config('landlord.default_morph_relation');
-        $morphRelation+= isset($this->morphRelation) ? array_filter($this->morphRelation) : [];
+        $morphRelation += isset($this->morphRelation) ? array_filter($this->morphRelation) : [];
 
         return $morphRelation;
     }

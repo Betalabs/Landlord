@@ -221,7 +221,7 @@ class TenantManager
      */
     protected function getTenantKey($tenant)
     {
-        $key = clone $tenant;
+        $key = $tenant;
         if ($tenant instanceof Model) {
             $key = $tenant->getForeignKey();
             if ($this->isRelatedByMany()) {
@@ -248,7 +248,7 @@ class TenantManager
      */
     protected function modelTenants(Model $model)
     {
-        return isset($this->belongsToTenantType) && $this->belongsToTenantType == TenantManager::BELONGS_TO_TENANT_TYPE_TO_ONE
+        return isset($model->belongsToTenantType) && $model->belongsToTenantType == TenantManager::BELONGS_TO_TENANT_TYPE_TO_ONE
             ? $this->tenants->only($model->getTenantColumns()) : $this->tenants;
     }
 }

@@ -29,4 +29,12 @@ class BelongsToOneTenant implements Scope
     {
         $builder->where("{$model->getTable()}.{$this->tenantColumn}", '=', $this->tenantId);
     }
+
+    /**
+     * @return string
+     */
+    public function getTenantColumn()
+    {
+        return $this->tenantColumn;
+    }
 }
