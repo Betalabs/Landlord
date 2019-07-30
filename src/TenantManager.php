@@ -194,9 +194,8 @@ class TenantManager
      */
     public function newModelRelatedToManyTenants($model)
     {
-        $this->modelTenants($model)->each(function($tenantId) use ($model) {
-            $model->tenants()->updateOrCreate(['tenants.id' => $tenantId]);
-        });
+        $tenantsToSync = $this->modelTenants($model)->values();
+        $model->tenants()->sync($tenantsToSync);
     }
 
     /**

@@ -38,7 +38,7 @@ trait BelongsToTenants
         });
 
         if (static::$landlord->isRelatedByMany()) {
-            static::saving(function(Model $model){
+            static::saved(function(Model $model){
                 static::$landlord->newModelRelatedToManyTenants($model);
             });
         }
