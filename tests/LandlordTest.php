@@ -110,7 +110,7 @@ class LandlordTest extends TestCase
         Landlord::shouldReceive('applyTenantScopes');
 
         $tenant = \Mockery::mock(TenantA::class);
-        $tenant->shouldReceive('sync')->with([1, 2]);
+        $tenant->shouldReceive('syncWithoutDetaching')->with([1, 2]);
 
         $mock = \Mockery::mock(ModelStubWithBelongsToManyTenants::class);
         $mock->shouldReceive('getTenantModel')->andReturn();
