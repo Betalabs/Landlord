@@ -6,13 +6,10 @@ use HipsterJazzbo\Landlord\BelongsToTenants;
 use HipsterJazzbo\Landlord\Facades\Landlord;
 use HipsterJazzbo\Landlord\TenantManager;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Testing\Concerns\MocksApplicationServices;
 use PHPUnit\Framework\TestCase;
 
 class LandlordTest extends TestCase
 {
-    use MocksApplicationServices;
-
     public function testTenantsWithStrings()
     {
         $landlord = new TenantManager();
