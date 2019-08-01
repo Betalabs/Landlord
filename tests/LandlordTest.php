@@ -6,10 +6,13 @@ use HipsterJazzbo\Landlord\BelongsToTenants;
 use HipsterJazzbo\Landlord\Facades\Landlord;
 use HipsterJazzbo\Landlord\TenantManager;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Testing\Concerns\MocksApplicationServices;
 use PHPUnit\Framework\TestCase;
 
 class LandlordTest extends TestCase
 {
+    use MocksApplicationServices;
+
     public function testTenantsWithStrings()
     {
         $landlord = new TenantManager();
@@ -110,7 +113,7 @@ class LandlordTest extends TestCase
         Landlord::shouldReceive('applyTenantScopes');
 
         $tenant = \Mockery::mock(TenantA::class);
-        $tenant->shouldReceive('syncWithoutDetaching')->with([1, 2]);
+        $tenant->shouldReceive('sync')->with([1, 2]);
 
         $mock = \Mockery::mock(ModelStubWithBelongsToManyTenants::class);
         $mock->shouldReceive('getTenantModel')->andReturn();

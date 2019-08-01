@@ -195,7 +195,7 @@ class TenantManager
     public function newModelRelatedToManyTenants($model)
     {
         $tenantsToSync = $this->modelTenants($model)->values()->toArray();
-        $model->tenants()->syncWithoutDetaching($tenantsToSync);
+        $model->tenants()->sync($tenantsToSync);
     }
 
     /**
